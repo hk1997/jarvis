@@ -17,14 +17,14 @@ def send_prompt(
     """Send a chat completion request to OpenAI with retries."""
     for attempt in range(max_retries):
         try:
-            response = openai.ChatCompletion.create(
+            response = openai.chat.completions.create(
                 model=model,
                 messages=messages,
                 max_tokens=max_tokens,
                 temperature=temperature,
             )
             logger.info("OpenAI API call successful")
-            return response["choices"][0]["message"]["content"]
+            return response.choices[0].message.content
         except Exception as exc:  # broad except for simplicity
             logger.error("OpenAI API error: %s", exc)
             if attempt >= max_retries - 1:
