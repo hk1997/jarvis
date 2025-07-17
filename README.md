@@ -29,5 +29,6 @@ To interact with the agents from your terminal run:
 python -m frontend.cli.cli_launcher
 ```
 
-On first run you will be asked for your OpenAI API key which will be saved to
-`~/.jarvis_config.json`.
+On first run you will be asked for your OpenAI API key. If you choose to run a
+locally hosted Hugging Face model, the CLI will also prompt for your Hugging
+Face API key. These keys are stored in `~/.jarvis_config.json`.

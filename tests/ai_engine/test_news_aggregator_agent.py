@@ -5,9 +5,20 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from ai_engine.agents.news_aggregator_agent import NewsAggregatorAgent
+from ai_engine.common import LLMInterface
 
 
-def test_generate_daily_digest(monkeypatch):
+class DummyLLM(LLMInterface):
+    def __init__(self, response: str) -> None:
+        self.response = response
+        self.last_messages = None
+
+    def send_prompt(self, messages, **kwargs):
+        self.last_messages = messages
+        return self.response
+
+
+def test_generate_daily_digest():
     expected = {
         "Global Headlines": ["gh"],
         "Finance & Economy": ["fe"],
@@ -16,16 +27,11 @@ def test_generate_daily_digest(monkeypatch):
         "Science & Tech": ["st"],
     }
 
-    def mock_send_prompt(messages, **kwargs):
-        mock_send_prompt.last_messages = messages
-        return json.dumps(expected)
-
-    monkeypatch.setattr("ai_engine.agents.news_aggregator_agent.send_prompt", mock_send_prompt)
-
-    agent = NewsAggregatorAgent()
+    llm = DummyLLM(json.dumps(expected))
+    agent = NewsAggregatorAgent(llm=llm)
     result = agent.generate_daily_digest()
 
     assert result == expected
-    assert mock_send_prompt.last_messages[0]["role"] == "system"
+    assert llm.last_messages[0]["role"] == "system"
     assert "Politics" in expected
 

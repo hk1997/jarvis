@@ -2,16 +2,16 @@ import json
 import logging
 from typing import Dict, List
 
-from ..common.gpt_utils import send_prompt
+from ..common import LLMInterface, OpenAILLM
 
 logger = logging.getLogger(__name__)
 
 
 class NewsAggregatorAgent:
-    """Agent that generates a daily news digest using ChatGPT."""
+    """Agent that generates a daily news digest using a language model."""
 
-    def __init__(self, model: str = "gpt-3.5-turbo") -> None:
-        self.model = model
+    def __init__(self, llm: LLMInterface | None = None) -> None:
+        self.llm = llm or OpenAILLM()
 
     def generate_daily_digest(self) -> Dict[str, List[str]]:
         """Generate and return today's news digest as a structured dict."""
@@ -34,14 +34,14 @@ class NewsAggregatorAgent:
             {"role": "user", "content": user_prompt},
         ]
 
-        logger.info("Requesting news digest from OpenAI")
-        response_text = send_prompt(messages, model=self.model)
+        logger.info("Requesting news digest from language model")
+        response_text = self.llm.send_prompt(messages)
 
         try:
             digest = json.loads(response_text)
         except json.JSONDecodeError as exc:
             logger.error("Failed to parse JSON response: %s", exc)
-            raise ValueError("Invalid JSON from OpenAI") from exc
+            raise ValueError("Invalid JSON from language model") from exc
 
         return digest
 
