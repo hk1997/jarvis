@@ -1,0 +1,36 @@
+[project]
+name = "ai-agent"
+version = "0.1.0"
+description = "Local-first multi-agent AI project scaffold."
+authors = [{name = "Your Name", email = "you@example.com"}]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "httpx",
+    "pydantic",
+    "langgraph",
+    "faiss-cpu",
+    "sentence-transformers",
+    "beautifulsoup4",
+    "readability-lxml",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "mypy",
+    "typer",
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true

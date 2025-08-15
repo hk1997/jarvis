@@ -1,0 +1,7 @@
+# Tool registry config
+tools:
+  - name: web_fetch
+  - name: fs
+  - name: shell
+  - name: calendar
+  - name: applescript
