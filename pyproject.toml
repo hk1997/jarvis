@@ -6,11 +6,11 @@ authors = [{name = "Your Name", email = "you@example.com"}]
 requires-python = ">=3.11"
 dependencies = [
     "fastapi",
+    "uvicorn",
     "httpx",
     "pydantic",
     "langgraph",
     "faiss-cpu",
-    "sentence-transformers",
     "beautifulsoup4",
     "readability-lxml",
 ]
@@ -34,3 +34,6 @@ target-version = "py311"
 [tool.mypy]
 python_version = "3.11"
 strict = true
+
+[tool.poetry]
+packages = [{ include = "agent_core", from = "src" }]
