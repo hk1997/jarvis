@@ -5,9 +5,20 @@ import pytest
 from agent_core.tools import fs, shell
 
 
-def test_read_file_stub() -> None:
-    """read_file returns an empty string for now."""
-    assert fs.read_file("foo") == ""
+def test_read_file_returns_contents(tmp_path) -> None:
+    """read_file should read the contents of a text file."""
+
+    file_path = tmp_path / "sample.txt"
+    file_path.write_text("example")
+
+    assert fs.read_file(file_path) == "example"
+
+
+def test_read_file_missing(tmp_path) -> None:
+    """read_file raises FileToolError when path does not exist."""
+
+    with pytest.raises(fs.FileToolError):
+        fs.read_file(tmp_path / "missing.txt")
 
 
 def test_shell_run_echo() -> None:
